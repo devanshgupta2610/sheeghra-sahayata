@@ -51,8 +51,13 @@ def api_root():
 
 # --- HTML pages ---
 @app.get("/")
-def page_login():
+def page_landing():
     return FileResponse(WEB_DIR / "index.html")
+
+
+@app.get("/login")
+def page_login():
+    return FileResponse(WEB_DIR / "login.html")
 
 
 @app.get("/home")

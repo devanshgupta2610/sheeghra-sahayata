@@ -5,36 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Authority Dashboard — Sheeghra Sahayata</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
-<body>
-  <main class="wrap wrap-wide stack">
-    <div class="row spread">
-      <div>
-        <h1 class="brand" style="font-size:1.75rem;margin:0">Authority Dashboard</h1>
-        <p class="muted" style="margin:0.25rem 0 0">Live incidents · polling every 5s</p>
-      </div>
-      <div class="row">
-        <a class="btn btn-soft" href="/home">← Tourist app</a>
-        <span class="badge active" id="live-badge">● LIVE</span>
-      </div>
-    </div>
+<body class="app-bg">
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
 
-    <div id="map"></div>
-    <div id="msg" class="toast hidden"></div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="logo" href="/dashboard">
+        <span class="logo-mark">S</span>
+        <span>
+          <div class="logo-text">Sheeghra Sahayata</div>
+          <div class="logo-sub">Command center</div>
+        </span>
+      </a>
+      <nav>
+        <div class="nav-section">
+          <div class="nav-section-title">Operations</div>
+          <a class="nav-item" href="/home" data-nav="home">Tourist app</a>
+          <a class="nav-item active" href="/dashboard" data-nav="dashboard">Live incidents</a>
+        </div>
+      </nav>
+      <div class="glass sidebar-card">
+        <h4>Response SLA</h4>
+        <p>Acknowledge active SOS quickly, then resolve when units are on scene.</p>
+        <span class="badge badge-ok" id="live-badge">Live</span>
+      </div>
+    </aside>
 
-    <div class="row spread">
-      <h2 style="margin:0;font-size:1.35rem;color:var(--teal-deep)">Incidents</h2>
-      <button type="button" class="btn btn-soft" id="refresh-btn">Refresh</button>
+    <div class="main-col">
+      <header class="topbar">
+        <button type="button" class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+        <button type="button" class="search-pill glass" id="search-pill">
+          <span>Filter incidents by type or status</span>
+          <kbd>⌘K</kbd>
+        </button>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-soft" id="refresh-btn">Refresh</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="reveal">
+          <h1 class="page-title">Authority dashboard</h1>
+          <p class="page-sub">Active SOS pins on the map · polling every 5 seconds</p>
+        </div>
+
+        <div class="grid-3 reveal reveal-d1" style="margin-bottom:1rem">
+          <div class="glass stat-card">
+            <div class="label">Active</div>
+            <div class="value" id="stat-active" data-count="0">0</div>
+            <div class="hint">Needs response</div>
+          </div>
+          <div class="glass stat-card">
+            <div class="label">Acknowledged</div>
+            <div class="value" id="stat-ack" data-count="0">0</div>
+            <div class="hint">Units notified</div>
+          </div>
+          <div class="glass stat-card">
+            <div class="label">Resolved</div>
+            <div class="value" id="stat-res" data-count="0">0</div>
+            <div class="hint">Closed today</div>
+          </div>
+        </div>
+
+        <div id="map" class="reveal reveal-d2"></div>
+        <div id="msg" class="toast glass hidden" style="margin:1rem 0"></div>
+
+        <div class="row spread reveal reveal-d3" style="margin:1.25rem 0 0.75rem">
+          <h2 style="font-family:var(--font-display);font-size:1.2rem">Incident feed</h2>
+        </div>
+        <div id="list" class="stack reveal reveal-d4"></div>
+      </main>
     </div>
-    <div id="list"></div>
-  </main>
+  </div>
+
+  <nav class="bottom-tabs" aria-label="Mobile tabs">
+    <a href="/home">Home</a>
+    <a class="active" href="/dashboard">Map</a>
+    <a href="/login">Auth</a>
+  </nav>
+
+  <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/static/js/api.js"></script>
-  <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/shell.js"></script>
   <script src="/static/js/dashboard.js"></script>
 </body>
 </html>

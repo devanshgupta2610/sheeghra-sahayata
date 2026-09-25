@@ -3,89 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sheeghra Sahayata — Login</title>
+  <title>Sheeghra Sahayata — Tourist Safety</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
-<body>
-  <main class="wrap">
-    <div class="card stack">
-      <div class="row spread">
-        <h1 class="brand" id="brand">Sheeghra Sahayata</h1>
-        <button type="button" class="btn btn-soft" id="lang-btn">हि</button>
-      </div>
-      <p class="tagline" id="tagline">Smart Tourist Safety</p>
+<body class="app-bg grid-glow">
+  <header class="pub-nav glass" id="pub-nav">
+    <a class="logo" href="/">
+      <span class="logo-mark">S</span>
+      <span>
+        <div class="logo-text">Sheeghra Sahayata</div>
+        <div class="logo-sub">Tourist safety</div>
+      </span>
+    </a>
+    <nav class="pub-links">
+      <a class="hide-sm" href="#features">Capabilities</a>
+      <a class="hide-sm" href="#authority">For authorities</a>
+      <a class="btn btn-ghost" href="/login">Log in</a>
+      <a class="btn btn-primary" href="/login">Open app</a>
+    </nav>
+  </header>
 
-      <div class="tabs">
-        <button type="button" class="tab active" data-mode="login" id="tab-login">Log in</button>
-        <button type="button" class="tab" data-mode="signup" id="tab-signup">Sign up</button>
-      </div>
-
-      <form id="auth-form" class="stack">
-        <div>
-          <label for="phone" id="lbl-phone">Phone number</label>
-          <input class="field" id="phone" name="phone" placeholder="Enter your phone number" required />
-        </div>
-        <div>
-          <label for="otp" id="lbl-otp">OTP</label>
-          <input class="field" id="otp" name="otp" placeholder="Enter OTP" maxlength="6" required />
-        </div>
-
-        <div id="signup-fields" class="stack hidden">
-          <div>
-            <label for="name" id="lbl-name">Full name</label>
-            <input class="field" id="name" />
-          </div>
-          <div>
-            <label for="emergency" id="lbl-emergency">Emergency contact</label>
-            <input class="field" id="emergency" />
-          </div>
-          <div class="row">
-            <div style="flex:1">
-              <label for="blood" id="lbl-blood">Blood group</label>
-              <input class="field" id="blood" placeholder="B+" />
-            </div>
-            <div style="flex:1">
-              <label for="allergies" id="lbl-allergies">Allergies</label>
-              <input class="field" id="allergies" />
-            </div>
-          </div>
-          <div>
-            <label for="age" id="lbl-age">Age range</label>
-            <select class="field" id="age">
-              <option value="18-35">18–35</option>
-              <option value="36-59">36–59</option>
-              <option value="60+" selected>60+</option>
-              <option value="under-18">Under 18</option>
-            </select>
-          </div>
-          <div class="row">
-            <div style="flex:1">
-              <label for="gender" id="lbl-gender">Gender</label>
-              <select class="field" id="gender">
-                <option value="">Prefer not to say</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div id="error" class="error hidden"></div>
-        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">Log in</button>
-      </form>
-
-      <p class="muted" style="text-align:center;margin:0">
-        <a href="/dashboard" id="dash-link">Authority Dashboard</a>
-      </p>
+  <section class="hero">
+    <div class="badge badge-accent reveal">India-ready emergency response</div>
+    <h1 class="reveal reveal-d1">Safety that travels with every tourist.</h1>
+    <p class="reveal reveal-d2">
+      One-tap SOS with live GPS, silent alerts, trip-scoped location sharing,
+      and an authority map that updates in seconds — built for real journeys, not demos alone.
+    </p>
+    <div class="hero-cta reveal reveal-d3">
+      <a class="btn btn-primary btn-lg" href="/login">Start protecting a trip</a>
+      <a class="btn btn-ghost btn-lg" href="/dashboard">View authority map</a>
     </div>
-  </main>
+  </section>
 
-  <script src="/static/js/api.js"></script>
-  <script src="/static/js/i18n.js"></script>
-  <script src="/static/js/ai.js"></script>
-  <script src="/static/js/login.js"></script>
+  <section class="feature-grid" id="features">
+    <article class="glass feature-card reveal reveal-d1">
+      <div class="feature-icon">112</div>
+      <h3>SOS in under a second</h3>
+      <p>Loud or silent SOS pins your coordinates for responders. Offline mock routes toward India’s 112 ERSS path.</p>
+    </article>
+    <article class="glass feature-card reveal reveal-d2">
+      <div class="feature-icon">🔒</div>
+      <h3>Privacy by design</h3>
+      <p>Location breadcrumbs exist only while a trip is active — then purge unless tied to an incident.</p>
+    </article>
+    <article class="glass feature-card reveal reveal-d3">
+      <div class="feature-icon">AI</div>
+      <h3>Inclusive safety helper</h3>
+      <p>Senior and women personas surface the right helplines. Ask the AI helper about hospitals, trips, or SOS.</p>
+    </article>
+  </section>
+
+  <section class="feature-grid" id="authority" style="margin-top:-2rem">
+    <article class="glass-strong feature-card reveal" style="grid-column:1/-1">
+      <div class="row spread">
+        <div>
+          <h3 style="font-family:var(--font-display);font-size:1.4rem;margin-bottom:0.4rem">Authority command view</h3>
+          <p class="muted" style="max-width:48ch">Live Leaflet map, 5-second polling, acknowledge then resolve — the demo moment that closes the loop from tourist to control room.</p>
+        </div>
+        <a class="btn btn-soft" href="/dashboard">Open dashboard</a>
+      </div>
+    </article>
+  </section>
+
+  <footer class="pub-footer">
+    Sheeghra Sahayata · Smart Tourist Safety &amp; Emergency Response
+  </footer>
+
+  <script>
+    const nav = document.getElementById("pub-nav");
+    window.addEventListener("scroll", () => nav.classList.toggle("scrolled", window.scrollY > 24), { passive: true });
+  </script>
 </body>
 </html>

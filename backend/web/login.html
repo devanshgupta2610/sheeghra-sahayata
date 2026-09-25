@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Log in — Sheeghra Sahayata</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body class="app-bg grid-glow">
+  <div class="auth-wrap">
+    <div class="glass-strong auth-card reveal">
+      <div class="row spread" style="margin-bottom:1.25rem">
+        <a class="logo" href="/">
+          <span class="logo-mark">S</span>
+          <span class="logo-text" id="brand">Sheeghra Sahayata</span>
+        </a>
+        <button type="button" class="btn btn-ghost" id="lang-btn" aria-label="Toggle language">हि</button>
+      </div>
+
+      <h1 id="auth-title">Welcome back</h1>
+      <p class="muted" id="tagline" style="margin-bottom:1.25rem">Smart Tourist Safety</p>
+
+      <div class="seg" style="margin-bottom:1.25rem;width:100%">
+        <button type="button" class="active" data-mode="login" id="tab-login" style="flex:1">Log in</button>
+        <button type="button" data-mode="signup" id="tab-signup" style="flex:1">Sign up</button>
+      </div>
+
+      <form id="auth-form" class="stack">
+        <div>
+          <label class="field-label" for="phone" id="lbl-phone">Phone number</label>
+          <input class="field" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="tel" required />
+        </div>
+        <div>
+          <label class="field-label" for="otp" id="lbl-otp">OTP</label>
+          <input class="field" id="otp" name="otp" placeholder="Enter OTP" maxlength="6" inputmode="numeric" required />
+        </div>
+
+        <div id="signup-fields" class="stack hidden">
+          <div>
+            <label class="field-label" for="name" id="lbl-name">Full name</label>
+            <input class="field" id="name" autocomplete="name" />
+          </div>
+          <div>
+            <label class="field-label" for="emergency" id="lbl-emergency">Emergency contact</label>
+            <input class="field" id="emergency" />
+          </div>
+          <div class="row">
+            <div style="flex:1">
+              <label class="field-label" for="blood" id="lbl-blood">Blood group</label>
+              <input class="field" id="blood" placeholder="B+" />
+            </div>
+            <div style="flex:1">
+              <label class="field-label" for="allergies" id="lbl-allergies">Allergies</label>
+              <input class="field" id="allergies" />
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="age" id="lbl-age">Age range</label>
+            <select class="field" id="age">
+              <option value="18-35">18–35</option>
+              <option value="36-59">36–59</option>
+              <option value="60+" selected>60+</option>
+              <option value="under-18">Under 18</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" for="gender" id="lbl-gender">Gender</label>
+            <select class="field" id="gender">
+              <option value="">Prefer not to say</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="error" class="toast glass toast-err hidden" role="alert"></div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">Log in</button>
+      </form>
+
+      <p class="muted" style="text-align:center;margin-top:1rem;font-size:0.88rem">
+        <a href="/dashboard" id="dash-link">Authority Dashboard</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/login.js"></script>
+</body>
+</html>

@@ -68,7 +68,7 @@ function session() {
 function requireAuth() {
   const s = session();
   if (!s.user_id) {
-    location.href = "/";
+    location.href = "/login";
     return null;
   }
   return s;

@@ -3,7 +3,8 @@
 
   function applyI18n() {
     const lang = localStorage.getItem("ss_user_lang") || "en";
-    document.getElementById("brand").textContent = t("brand");
+    const brand = document.getElementById("brand");
+    if (brand) brand.textContent = t("brand");
     document.getElementById("tagline").textContent = t("tagline");
     document.getElementById("tab-login").textContent = t("login");
     document.getElementById("tab-signup").textContent = t("signup");
@@ -20,14 +21,16 @@
     document.getElementById("dash-link").textContent = t("dashboard");
     document.getElementById("lang-btn").textContent = lang === "hi" ? "EN" : "हि";
     document.getElementById("submit-btn").textContent = mode === "signup" ? t("signup") : t("login");
+    const title = document.getElementById("auth-title");
+    if (title) title.textContent = mode === "signup" ? t("signup") : t("login");
   }
 
   document.getElementById("lang-btn").addEventListener("click", toggleLang);
 
-  document.querySelectorAll(".tab").forEach((tab) => {
+  document.querySelectorAll("[data-mode]").forEach((tab) => {
     tab.addEventListener("click", () => {
       mode = tab.dataset.mode;
-      document.querySelectorAll(".tab").forEach((x) => x.classList.remove("active"));
+      document.querySelectorAll("[data-mode]").forEach((x) => x.classList.remove("active"));
       tab.classList.add("active");
       document.getElementById("signup-fields").classList.toggle("hidden", mode !== "signup");
       applyI18n();
@@ -65,18 +68,15 @@
       saveSession(data.user);
       location.href = "/home";
     } catch (err) {
-      errEl.textContent = err.message === "OFFLINE" ? "Cannot reach server — is the backend running?" : err.message;
+      errEl.textContent =
+        err.message === "OFFLINE"
+          ? "Cannot reach server — is the backend running?"
+          : err.message;
       errEl.classList.remove("hidden");
     } finally {
       btn.disabled = false;
     }
   });
-
-  // Already logged in?
-  if (localStorage.getItem("ss_user_id")) {
-    // stay on login so user can switch accounts; optional auto-redirect:
-    // location.href = "/home";
-  }
 
   applyI18n();
 })();

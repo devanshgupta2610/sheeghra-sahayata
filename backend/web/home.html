@@ -3,62 +3,130 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sheeghra Sahayata — Safety</title>
+  <title>Safety — Sheeghra Sahayata</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/styles.css" />
 </head>
-<body>
-  <main class="wrap stack">
-    <div class="row spread nav-mini">
-      <h1 class="brand" style="font-size:1.45rem" id="brand">Sheeghra Sahayata</h1>
-      <div class="row">
-        <button type="button" class="btn btn-soft" id="lang-btn">हि</button>
-        <a class="btn btn-ghost" href="/dashboard" id="dash-link">Dashboard</a>
-        <button type="button" class="btn btn-ghost" id="logout-btn">Log out</button>
+<body class="app-bg">
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <a class="logo" href="/home">
+        <span class="logo-mark">S</span>
+        <span>
+          <div class="logo-text">Sheeghra Sahayata</div>
+          <div class="logo-sub">Tourist mode</div>
+        </span>
+      </a>
+
+      <nav>
+        <div class="nav-section">
+          <div class="nav-section-title">Travel</div>
+          <a class="nav-item active" href="/home" data-nav="home">Safety home</a>
+          <a class="nav-item" href="/dashboard" data-nav="dashboard">Authority map</a>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Account</div>
+          <button type="button" class="nav-item" id="lang-btn" style="width:100%;background:transparent;border:none;text-align:left;cursor:pointer">Language</button>
+          <button type="button" class="nav-item" id="logout-btn" style="width:100%;background:transparent;border:none;text-align:left;cursor:pointer">Log out</button>
+        </div>
+      </nav>
+
+      <div class="glass sidebar-card">
+        <h4>Privacy tip</h4>
+        <p>Location sharing runs only while your trip is active. Ending a trip schedules cleanup.</p>
+        <span class="badge badge-accent">Trip-scoped GPS</span>
       </div>
+    </aside>
+
+    <div class="main-col">
+      <header class="topbar">
+        <button type="button" class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+        <button type="button" class="search-pill glass" id="search-pill" aria-label="Search">
+          <span>Search helplines, SOS tips</span>
+          <kbd>⌘K</kbd>
+        </button>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-ghost" id="notif-btn" aria-label="Notifications">🔔</button>
+          <div class="avatar" id="user-avatar" title="Profile">R</div>
+        </div>
+      </header>
+
+      <main class="content grid-glow">
+        <div class="reveal">
+          <h1 class="page-title">Stay safe on this trip</h1>
+          <p class="page-sub" id="greeting">Loading profile…</p>
+        </div>
+
+        <div class="grid-3 reveal reveal-d1" style="margin-bottom:1rem">
+          <div class="glass stat-card">
+            <div class="label">Trip status</div>
+            <div class="value" id="stat-trip" style="font-size:1.15rem;font-family:var(--font-body)">—</div>
+            <div class="hint" id="trip-hint">Start a trip to share location</div>
+          </div>
+          <div class="glass stat-card">
+            <div class="label">Live coordinates</div>
+            <div class="value mono" id="stat-coords" style="font-size:0.95rem">—</div>
+            <div class="hint">Browser geolocation</div>
+          </div>
+          <div class="glass stat-card">
+            <div class="label">Risk zone</div>
+            <div class="value" id="stat-risk" style="font-size:1.15rem;font-family:var(--font-body)">Clear</div>
+            <div class="hint">Connaught Place demo fence</div>
+          </div>
+        </div>
+
+        <div id="geofence" class="warn-banner hidden reveal reveal-d2"></div>
+
+        <div class="grid-2">
+          <section class="glass stack reveal reveal-d2" style="padding:1.25rem">
+            <div class="row spread">
+              <h2 style="font-family:var(--font-display);font-size:1.15rem">Trip controls</h2>
+              <span class="badge" id="trip-badge">Idle</span>
+            </div>
+            <div class="row">
+              <button type="button" class="btn btn-primary" style="flex:1" id="trip-btn">Start Trip</button>
+              <button type="button" class="btn btn-ghost" id="gps-btn">Refresh GPS</button>
+            </div>
+            <div class="sos-stage">
+              <button type="button" class="sos-btn" id="sos-btn" aria-label="Send SOS">SOS</button>
+              <button type="button" class="btn btn-ghost" id="silent-btn" style="margin-top:0.85rem">Silent SOS</button>
+            </div>
+          </section>
+
+          <section class="glass stack reveal reveal-d3" style="padding:1.25rem" id="safety-panel">
+            <h2 style="font-family:var(--font-display);font-size:1.15rem" id="quick-title">Quick Safety Panel</h2>
+            <div id="safety-body"></div>
+          </section>
+        </div>
+      </main>
     </div>
+  </div>
 
-    <p class="muted" id="greeting" style="margin:0"></p>
-    <div id="geofence" class="warn-banner hidden"></div>
+  <nav class="bottom-tabs" aria-label="Mobile tabs">
+    <a class="active" href="/home">Home</a>
+    <a href="/dashboard">Map</a>
+    <a href="#" id="tab-sos">SOS</a>
+    <a href="#" id="tab-ai">AI</a>
+    <a href="/login" id="tab-out">Out</a>
+  </nav>
 
-    <div>
-      <p id="trip-status" style="font-weight:700;margin:0 0 0.35rem"></p>
-      <p class="muted" style="font-size:0.95rem;margin:0">Demo danger zone: Connaught Place (800m)</p>
-    </div>
-
-    <div class="row">
-      <button type="button" class="btn btn-primary btn-lg" style="flex:1" id="trip-btn">Start Trip</button>
-      <button type="button" class="btn btn-soft btn-lg" id="gps-btn">📍 GPS</button>
-    </div>
-
-    <div class="sos-wrap">
-      <button type="button" class="sos-btn" id="sos-btn">SOS</button>
-      <div style="margin-top:0.75rem">
-        <button type="button" class="btn btn-soft" id="silent-btn">Silent SOS</button>
-      </div>
-      <p class="muted" id="coords" style="font-size:0.95rem;margin:0.6rem 0 0"></p>
-    </div>
-
-    <div id="toast" class="toast hidden"></div>
-
-    <section class="panel" id="safety-panel">
-      <h2 id="quick-title">Quick Safety Panel</h2>
-      <div id="safety-body"></div>
-    </section>
-  </main>
-
-  <div id="offline-modal" class="offline-modal hidden">
-    <div class="inner stack">
-      <h2 id="offline-title" style="margin:0">Sending via SMS…</h2>
-      <p id="offline-coords" class="muted"></p>
-      <p style="font-size:0.95rem;opacity:0.85">Demo mock — production routes via India’s 112 ERSS / telecom SMS.</p>
+  <div id="offline-modal" class="offline-modal" role="dialog" aria-modal="true">
+    <div class="glass-strong inner stack">
+      <h2 id="offline-title" style="font-family:var(--font-display)">Sending via SMS…</h2>
+      <p id="offline-coords" class="mono muted"></p>
+      <p class="muted" style="font-size:0.88rem">Demo mock — production would route via India’s 112 ERSS.</p>
       <button type="button" class="btn btn-primary" id="offline-ok">OK</button>
     </div>
   </div>
 
+  <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
+
   <script src="/static/js/api.js"></script>
   <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/shell.js"></script>
   <script src="/static/js/ai.js"></script>
   <script src="/static/js/home.js"></script>
 </body>

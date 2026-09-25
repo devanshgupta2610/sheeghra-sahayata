@@ -12,7 +12,7 @@ function mountAIHelper() {
 
   const panel = document.createElement("div");
   panel.id = "ai-panel";
-  panel.className = "chat-panel";
+  panel.className = "chat-panel glass-strong";
   panel.innerHTML = `
     <div class="chat-head">
       <span data-i18n="ai_title">${t("ai_title")}</span>
