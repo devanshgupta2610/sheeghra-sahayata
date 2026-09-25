@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Authority Dashboard — Sheeghra Sahayata</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <main class="wrap wrap-wide stack">
+    <div class="row spread">
+      <div>
+        <h1 class="brand" style="font-size:1.75rem;margin:0">Authority Dashboard</h1>
+        <p class="muted" style="margin:0.25rem 0 0">Live incidents · polling every 5s</p>
+      </div>
+      <div class="row">
+        <a class="btn btn-soft" href="/home">← Tourist app</a>
+        <span class="badge active" id="live-badge">● LIVE</span>
+      </div>
+    </div>
+
+    <div id="map"></div>
+    <div id="msg" class="toast hidden"></div>
+
+    <div class="row spread">
+      <h2 style="margin:0;font-size:1.35rem;color:var(--teal-deep)">Incidents</h2>
+      <button type="button" class="btn btn-soft" id="refresh-btn">Refresh</button>
+    </div>
+    <div id="list"></div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

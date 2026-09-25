@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pip install -r requirements.txt && reflex export --frontend-only",
+  "outputDirectory": ".web/build/client",
+  "framework": null,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}

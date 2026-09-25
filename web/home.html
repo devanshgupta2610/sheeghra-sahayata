@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sheeghra Sahayata — Safety</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <main class="wrap stack">
+    <div class="row spread nav-mini">
+      <h1 class="brand" style="font-size:1.45rem" id="brand">Sheeghra Sahayata</h1>
+      <div class="row">
+        <button type="button" class="btn btn-soft" id="lang-btn">हि</button>
+        <a class="btn btn-ghost" href="/dashboard" id="dash-link">Dashboard</a>
+        <button type="button" class="btn btn-ghost" id="logout-btn">Log out</button>
+      </div>
+    </div>
+
+    <p class="muted" id="greeting" style="margin:0"></p>
+    <div id="geofence" class="warn-banner hidden"></div>
+
+    <div>
+      <p id="trip-status" style="font-weight:700;margin:0 0 0.35rem"></p>
+      <p class="muted" style="font-size:0.95rem;margin:0">Demo danger zone: Connaught Place (800m)</p>
+    </div>
+
+    <div class="row">
+      <button type="button" class="btn btn-primary btn-lg" style="flex:1" id="trip-btn">Start Trip</button>
+      <button type="button" class="btn btn-soft btn-lg" id="gps-btn">📍 GPS</button>
+    </div>
+
+    <div class="sos-wrap">
+      <button type="button" class="sos-btn" id="sos-btn">SOS</button>
+      <div style="margin-top:0.75rem">
+        <button type="button" class="btn btn-soft" id="silent-btn">Silent SOS</button>
+      </div>
+      <p class="muted" id="coords" style="font-size:0.95rem;margin:0.6rem 0 0"></p>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <section class="panel" id="safety-panel">
+      <h2 id="quick-title">Quick Safety Panel</h2>
+      <div id="safety-body"></div>
+    </section>
+  </main>
+
+  <div id="offline-modal" class="offline-modal hidden">
+    <div class="inner stack">
+      <h2 id="offline-title" style="margin:0">Sending via SMS…</h2>
+      <p id="offline-coords" class="muted"></p>
+      <p style="font-size:0.95rem;opacity:0.85">Demo mock — production routes via India’s 112 ERSS / telecom SMS.</p>
+      <button type="button" class="btn btn-primary" id="offline-ok">OK</button>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/i18n.js"></script>
+  <script src="/static/js/ai.js"></script>
+  <script src="/static/js/home.js"></script>
+</body>
+</html>
