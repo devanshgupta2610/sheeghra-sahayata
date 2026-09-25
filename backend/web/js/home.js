@@ -86,7 +86,8 @@
     els.tripBadge.textContent = tripActive ? "Sharing" : "Idle";
     els.tripBadge.className = tripActive ? "badge badge-ok" : "badge";
     els.tripBtn.textContent = tripActive ? t("end_trip") : t("start_trip");
-    els.tripBtn.className = tripActive ? "btn btn-danger" : "btn btn-primary";
+    els.tripBtn.classList.remove("btn-primary", "btn-danger");
+    els.tripBtn.classList.add(tripActive ? "btn-danger" : "btn-primary");
     els.tripBtn.style.flex = "1";
   }
 

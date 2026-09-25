@@ -27,12 +27,17 @@
 
   document.getElementById("lang-btn").addEventListener("click", toggleLang);
 
-  document.querySelectorAll("[data-mode]").forEach((tab) => {
-    tab.addEventListener("click", () => {
+  document.querySelectorAll(".seg [data-mode]").forEach((tab) => {
+    tab.addEventListener("click", (e) => {
+      e.preventDefault();
       mode = tab.dataset.mode;
-      document.querySelectorAll("[data-mode]").forEach((x) => x.classList.remove("active"));
+      document.querySelectorAll(".seg [data-mode]").forEach((x) => x.classList.remove("active"));
       tab.classList.add("active");
-      document.getElementById("signup-fields").classList.toggle("hidden", mode !== "signup");
+      const signup = document.getElementById("signup-fields");
+      if (signup) {
+        if (mode === "signup") signup.classList.remove("hidden");
+        else signup.classList.add("hidden");
+      }
       applyI18n();
     });
   });

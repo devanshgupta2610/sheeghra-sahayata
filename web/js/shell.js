@@ -35,8 +35,17 @@ function initShell() {
 
   const search = document.getElementById("search-pill");
   search?.addEventListener("click", () => {
-    const q = prompt("Search helplines or tips (demo):", "Ambulance 108");
+    const q = prompt("Search helplines or tips:", "Ambulance 108");
     if (q) toast(`Showing guidance for “${q}”`);
+  });
+
+  document.getElementById("notif-btn")?.addEventListener("click", () => {
+    toast("No new alerts. Active SOS appears on the authority map.");
+  });
+
+  document.getElementById("user-avatar")?.addEventListener("click", () => {
+    const s = typeof session === "function" ? session() : {};
+    toast(s.name || s.phone || "Tourist profile");
   });
 
   window.addEventListener("keydown", (e) => {
