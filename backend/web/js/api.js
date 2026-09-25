@@ -1,8 +1,12 @@
-/** API base — same origin when served by FastAPI; override via ?api= */
+/** API base — same origin on Railway; Vercel points at Railway API */
 window.SHEEGHRA_API =
   new URLSearchParams(location.search).get("api") ||
   localStorage.getItem("ss_api") ||
-  (location.port === "8000" || location.port === "" ? "" : "http://127.0.0.1:8000");
+  (location.hostname.endsWith("vercel.app")
+    ? "https://sheeghra-sahayata-production.up.railway.app"
+    : location.port === "8000" || location.port === ""
+      ? ""
+      : "http://127.0.0.1:8000");
 
 async function api(method, path, body) {
   const opts = {
