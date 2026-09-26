@@ -115,10 +115,14 @@
 
   <div id="offline-modal" class="offline-modal" role="dialog" aria-modal="true">
     <div class="glass-strong inner stack">
-      <h2 id="offline-title" style="font-family:var(--font-display)">Sending via SMS…</h2>
-      <p id="offline-coords" class="mono muted"></p>
-      <p class="muted" style="font-size:0.88rem">Demo mock — production would route via India’s 112 ERSS.</p>
-      <button type="button" class="btn btn-primary" id="offline-ok">OK</button>
+      <h2 id="offline-title" style="font-family:var(--font-display)">No data — use phone fallback</h2>
+      <p id="offline-body" class="muted" style="font-size:0.92rem;margin:0">
+        SOS is queued on this device and will sync when data returns. Call 112 or SMS your emergency contact now.
+      </p>
+      <p id="offline-coords" class="mono muted" style="margin:0"></p>
+      <a class="btn btn-danger btn-block" id="offline-call-112" href="tel:112">Call 112 (ERSS)</a>
+      <a class="btn btn-soft btn-block" id="offline-sms" href="#">SMS emergency contact</a>
+      <button type="button" class="btn btn-ghost btn-block" id="offline-ok">Keep queued</button>
     </div>
   </div>
 

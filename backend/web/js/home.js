@@ -6,6 +6,7 @@
   let lon = 77.2090;
   let tripActive = false;
   let accessible = localStorage.getItem("ss_accessible") === "1";
+  let lastOfflineSilent = false;
 
   const els = {
     greeting: document.getElementById("greeting"),
@@ -20,7 +21,10 @@
     safetyBody: document.getElementById("safety-body"),
     offlineModal: document.getElementById("offline-modal"),
     offlineTitle: document.getElementById("offline-title"),
+    offlineBody: document.getElementById("offline-body"),
     offlineCoords: document.getElementById("offline-coords"),
+    offlineCall: document.getElementById("offline-call-112"),
+    offlineSms: document.getElementById("offline-sms"),
     offlineOk: document.getElementById("offline-ok"),
     statTrip: document.getElementById("stat-trip"),
     statCoords: document.getElementById("stat-coords"),
@@ -157,28 +161,68 @@
     }
   }
 
+  function openOfflineFallback(silent) {
+    lastOfflineSilent = !!silent;
+    const n = getSosQueue().length;
+    els.offlineTitle.textContent = t("offline");
+    if (els.offlineBody) els.offlineBody.textContent = t("offline_body");
+    els.offlineCoords.textContent = `lat=${lat.toFixed(5)}, lon=${lon.toFixed(5)} · queued=${n}`;
+    if (els.offlineCall) {
+      els.offlineCall.href = "tel:112";
+      els.offlineCall.textContent = t("offline_call");
+    }
+    if (els.offlineSms) {
+      const contact = s.emergency_contact || "";
+      const digits = phoneDigits(contact);
+      els.offlineSms.textContent = t("offline_sms");
+      if (digits) {
+        els.offlineSms.href = smsHref(digits, sosSmsBody(lat, lon, silent));
+        els.offlineSms.classList.remove("disabled");
+      } else {
+        // Still open SMS composer with body so user can pick a recipient
+        els.offlineSms.href = smsHref("", sosSmsBody(lat, lon, silent));
+      }
+    }
+    if (els.offlineOk) els.offlineOk.textContent = t("offline_keep");
+    els.offlineModal.classList.add("open");
+  }
+
+  async function tryFlushQueue() {
+    if (!getSosQueue().length) return;
+    try {
+      const { sent } = await flushSosQueue();
+      if (sent > 0) showToast(t("offline_flushed"));
+    } catch (_) {}
+  }
+
   async function triggerSos(silent) {
     await refreshGPS();
+    const payload = {
+      user_id: s.user_id,
+      trip_id: s.trip_id || null,
+      lat,
+      lon,
+      timestamp: new Date().toISOString(),
+      silent: !!silent,
+    };
     try {
-      await api("POST", "/sos", {
-        user_id: s.user_id,
-        trip_id: s.trip_id || null,
-        lat,
-        lon,
-        timestamp: new Date().toISOString(),
-        silent: !!silent,
-      });
+      await api("POST", "/sos", payload);
       if (silent) showToast(t("silent_ok"));
       else {
         els.sosBtn.classList.add("flash");
         showToast(t("sos_ok"));
         setTimeout(() => els.sosBtn.classList.remove("flash"), 2500);
       }
+      // Also flush anything that was waiting
+      tryFlushQueue();
     } catch (err) {
       if (err.message === "OFFLINE") {
-        console.log(`[OFFLINE SMS MOCK] lat=${lat} lon=${lon} user=${s.user_id}`);
-        els.offlineCoords.textContent = `lat=${lat}, lon=${lon}`;
-        els.offlineModal.classList.add("open");
+        enqueueSos(payload);
+        if (!silent) {
+          els.sosBtn.classList.add("flash");
+          setTimeout(() => els.sosBtn.classList.remove("flash"), 2500);
+        }
+        openOfflineFallback(silent);
       } else showToast(err.message, "err");
     }
   }
@@ -203,7 +247,11 @@
     els.sosBtn.textContent = t("sos");
     els.silentBtn.textContent = t("silent");
     els.quickTitle.textContent = t("quick");
-    els.offlineTitle.textContent = t("offline");
+    if (els.offlineTitle) els.offlineTitle.textContent = t("offline");
+    if (els.offlineBody) els.offlineBody.textContent = t("offline_body");
+    if (els.offlineCall) els.offlineCall.textContent = t("offline_call");
+    if (els.offlineSms) els.offlineSms.textContent = t("offline_sms");
+    if (els.offlineOk) els.offlineOk.textContent = t("offline_keep");
     updateTripUI();
     renderSafetyPanel();
   }
@@ -237,10 +285,24 @@
     els.offlineModal.classList.remove("open");
     showToast(t("offline_ok"));
   });
+  els.offlineSms?.addEventListener("click", (e) => {
+    if (!phoneDigits(s.emergency_contact || "")) {
+      // Composer still opens; hint that contact is missing
+      showToast(t("offline_sms_missing"), "err");
+    }
+  });
+
+  window.addEventListener("online", () => {
+    tryFlushQueue();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") tryFlushQueue();
+  });
 
   applyAccessible();
   applyI18n();
   updateGeoUI();
   refreshGPS();
   restoreTrip();
+  tryFlushQueue();
 })();

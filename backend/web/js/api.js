@@ -39,6 +39,7 @@ function saveSession(user) {
   localStorage.setItem("ss_user_gender", user.gender || "");
   localStorage.setItem("ss_user_age", user.age_range || "");
   localStorage.setItem("ss_user_lang", user.language_pref || "en");
+  localStorage.setItem("ss_emergency", user.emergency_contact || "");
 }
 
 function clearSession() {
@@ -50,6 +51,7 @@ function clearSession() {
     "ss_user_age",
     "ss_user_lang",
     "ss_trip_id",
+    "ss_emergency",
   ].forEach((k) => localStorage.removeItem(k));
 }
 
@@ -62,7 +64,74 @@ function session() {
     age_range: localStorage.getItem("ss_user_age") || "",
     lang: localStorage.getItem("ss_user_lang") || "en",
     trip_id: localStorage.getItem("ss_trip_id") || "",
+    emergency_contact: localStorage.getItem("ss_emergency") || "",
   };
+}
+
+/** Offline SOS queue — persisted until connectivity returns */
+const SOS_QUEUE_KEY = "ss_sos_queue";
+
+function getSosQueue() {
+  try {
+    const raw = localStorage.getItem(SOS_QUEUE_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function setSosQueue(list) {
+  localStorage.setItem(SOS_QUEUE_KEY, JSON.stringify(list || []));
+}
+
+function enqueueSos(payload) {
+  const list = getSosQueue();
+  list.push({
+    ...payload,
+    queued_at: new Date().toISOString(),
+    id: `q_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+  });
+  setSosQueue(list);
+  return list.length;
+}
+
+async function flushSosQueue() {
+  const list = getSosQueue();
+  if (!list.length) return { sent: 0, left: 0 };
+  const remaining = [];
+  let sent = 0;
+  for (const item of list) {
+    try {
+      const { id, queued_at, ...body } = item;
+      await api("POST", "/sos", body);
+      sent += 1;
+    } catch (_) {
+      remaining.push(item);
+    }
+  }
+  setSosQueue(remaining);
+  return { sent, left: remaining.length };
+}
+
+/** Digits only for sms:/tel: links */
+function phoneDigits(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+/** Build sms: URI (iOS uses &body=, Android uses ?body=) */
+function smsHref(toNumber, body) {
+  const digits = phoneDigits(toNumber);
+  const ios = /iPhone|iPad|iPod/i.test(navigator.userAgent || "");
+  const sep = ios ? "&" : "?";
+  const dest = digits ? digits : "";
+  return `sms:${dest}${sep}body=${encodeURIComponent(body)}`;
+}
+
+function sosSmsBody(lat, lon, silent) {
+  const maps = `https://maps.google.com/?q=${lat},${lon}`;
+  const kind = silent ? "Silent SOS" : "SOS";
+  return `Sheeghra Sahayata ${kind}: Need help. Location: ${lat.toFixed(5)}, ${lon.toFixed(5)} ${maps}`;
 }
 
 function requireAuth() {

@@ -776,7 +776,8 @@ label.field-label {
   padding: 1rem;
 }
 .offline-modal.open { display: grid; }
-.offline-modal .inner { width: min(360px, 100%); padding: 1.5rem; text-align: center; }
+.offline-modal .inner { width: min(380px, 100%); padding: 1.5rem; text-align: center; gap: 0.65rem; }
+.offline-modal .inner .btn { text-decoration: none; }
 
 .hidden { display: none !important; }
 
