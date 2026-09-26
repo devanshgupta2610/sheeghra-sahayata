@@ -1,5 +1,26 @@
 (() => {
   let mode = "login";
+  const phoneInput = document.getElementById("phone");
+
+  /** Keep only digits and cap at 10. */
+  function digitsOnly10(value) {
+    return String(value || "").replace(/\D/g, "").slice(0, 10);
+  }
+
+  /** Store/lookup format used in DB seed: +91XXXXXXXXXX */
+  function toE164India(tenDigits) {
+    return `+91${tenDigits}`;
+  }
+
+  phoneInput.addEventListener("input", () => {
+    phoneInput.value = digitsOnly10(phoneInput.value);
+  });
+
+  phoneInput.addEventListener("paste", (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData("text");
+    phoneInput.value = digitsOnly10(text);
+  });
 
   function applyI18n() {
     const lang = localStorage.getItem("ss_user_lang") || "en";
@@ -10,7 +31,7 @@
     document.getElementById("tab-signup").textContent = t("signup");
     document.getElementById("lbl-phone").textContent = t("phone");
     document.getElementById("lbl-otp").textContent = t("otp");
-    document.getElementById("phone").placeholder = t("ph_phone");
+    phoneInput.placeholder = t("ph_phone");
     document.getElementById("otp").placeholder = t("ph_otp");
     document.getElementById("lbl-name").textContent = t("name");
     document.getElementById("lbl-emergency").textContent = t("emergency");
@@ -46,7 +67,16 @@
     e.preventDefault();
     const errEl = document.getElementById("error");
     errEl.classList.add("hidden");
-    const phone = document.getElementById("phone").value.trim();
+
+    const ten = digitsOnly10(phoneInput.value);
+    phoneInput.value = ten;
+    if (ten.length !== 10) {
+      errEl.textContent = t("phone_err");
+      errEl.classList.remove("hidden");
+      return;
+    }
+
+    const phone = toE164India(ten);
     const otp = document.getElementById("otp").value.trim();
     const btn = document.getElementById("submit-btn");
     btn.disabled = true;

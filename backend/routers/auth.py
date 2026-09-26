@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 class SignupRequest(BaseModel):
-    phone: str = Field(..., min_length=10, description="Phone with country code, e.g. +919876543210")
+    phone: str = Field(..., description="10-digit mobile or +91XXXXXXXXXX")
     name: Optional[str] = None
     emergency_contact: Optional[str] = None
     medical_info: Optional[dict] = None  # {blood_group, allergies}
@@ -33,21 +33,37 @@ def _otp_ok(otp: str) -> bool:
     return otp.isdigit() and len(otp) == 6
 
 
+def _normalize_phone(phone: str) -> str:
+    """
+    Accept 10-digit Indian mobiles (or +91 / 91 prefixed) and store as +91XXXXXXXXXX.
+    Rejects anything that does not resolve to exactly 10 national digits.
+    """
+    digits = "".join(ch for ch in (phone or "") if ch.isdigit())
+    if digits.startswith("91") and len(digits) == 12:
+        digits = digits[2:]
+    if len(digits) != 10:
+        raise HTTPException(
+            status_code=400,
+            detail="Phone must be a 10-digit mobile number",
+        )
+    return f"+91{digits}"
+
+
 @router.post("/signup")
 def signup(body: SignupRequest):
     if not _otp_ok(body.otp):
         raise HTTPException(status_code=400, detail="OTP must be a 6-digit code")
 
+    phone = _normalize_phone(body.phone)
     sb = get_supabase()
 
-    # Upsert profile by phone
-    existing = sb.table("profiles").select("*").eq("phone", body.phone).execute()
+    existing = sb.table("profiles").select("*").eq("phone", phone).execute()
     if existing.data:
         raise HTTPException(status_code=409, detail="Phone already registered — use /auth/login")
 
     profile = {
         "id": str(uuid4()),
-        "phone": body.phone,
+        "phone": phone,
         "name": body.name,
         "emergency_contact": body.emergency_contact,
         "medical_info": body.medical_info or {},
@@ -64,7 +80,6 @@ def signup(body: SignupRequest):
     return {
         "message": "Signup successful",
         "user": user,
-        # Demo session token — frontend stores this as user_id
         "session": {"user_id": user["id"], "phone": user["phone"]},
     }
 
@@ -74,8 +89,9 @@ def login(body: LoginRequest):
     if not _otp_ok(body.otp):
         raise HTTPException(status_code=400, detail="OTP must be a 6-digit code")
 
+    phone = _normalize_phone(body.phone)
     sb = get_supabase()
-    result = sb.table("profiles").select("*").eq("phone", body.phone).execute()
+    result = sb.table("profiles").select("*").eq("phone", phone).execute()
     if not result.data:
         raise HTTPException(status_code=404, detail="User not found — please signup first")
 

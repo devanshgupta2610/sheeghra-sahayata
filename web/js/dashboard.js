@@ -2,10 +2,21 @@
   const listEl = document.getElementById("list");
   const msgEl = document.getElementById("msg");
   const map = L.map("map").setView([28.6139, 77.209], 11);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution: "&copy; OpenStreetMap &copy; CARTO",
-    maxZoom: 19,
-  }).addTo(map);
+  // Esri dark basemap — no API key (CARTO dark_all now watermarks without one)
+  L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+    {
+      attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ",
+      maxZoom: 16,
+    }
+  ).addTo(map);
+  L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
+    {
+      attribution: "",
+      maxZoom: 16,
+    }
+  ).addTo(map);
 
   let layer = L.layerGroup().addTo(map);
 

@@ -30,7 +30,18 @@
       <form id="auth-form" class="stack">
         <div>
           <label class="field-label" for="phone" id="lbl-phone">Phone number</label>
-          <input class="field" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="tel" required />
+          <input
+            class="field"
+            id="phone"
+            name="phone"
+            placeholder="10-digit mobile number"
+            autocomplete="tel"
+            inputmode="numeric"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            minlength="10"
+            required
+          />
         </div>
         <div>
           <label class="field-label" for="otp" id="lbl-otp">OTP</label>
