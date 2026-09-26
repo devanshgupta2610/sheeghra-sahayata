@@ -202,16 +202,3 @@ To force the banner in a pitch without being on site, temporarily set default `l
 OTP: any 6 digits (e.g. `123456`).
 
 ---
-
-## Stack checklist
-
-- [x] Auth — phone + mocked OTP, profile fields  
-- [x] Trip start/end + server-side location gate  
-- [x] SOS + Silent SOS + offline SMS mock UI  
-- [x] Privacy location cleanup script  
-- [x] Geofence haversine warning  
-- [x] Authority dashboard (Leaflet + poll + status buttons)  
-- [x] Inclusive Quick Safety Panel + EN/HI  
-- [x] FastAPI routers + `.env.example` + README  
-
-Built for demo clarity over production perfection. Good luck in the judging round.
